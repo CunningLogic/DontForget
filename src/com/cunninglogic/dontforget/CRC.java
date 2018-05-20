@@ -42,7 +42,7 @@ public class CRC {
             0x7BC7, 0x6A4E, 0x58D5, 0x495C, 0x3DE3, 0x2C6A, 0x1EF1, 0x0F78,
     };
 
-    public static int calc (byte[] packet) {
+    public static int calc(byte[] packet) {
         int j = seed;
         int len = packet.length;
         for (int i = 0; i < len; i++) {
@@ -56,10 +56,10 @@ public class CRC {
         byte[] newPkt = new byte[packet.length + 2];
         byte[] crc = ByteBuffer.allocate(2).putShort((short)CRC.calc(packet)).array();
 
-        newPkt[newPkt.length -2] = crc[1];
-        newPkt[newPkt.length -1] = crc[0];
+        newPkt[newPkt.length - 2] = crc[1];
+        newPkt[newPkt.length - 1] = crc[0];
 
-        System.arraycopy(packet,0,newPkt,0,packet.length);
+        System.arraycopy(packet, 0, newPkt, 0, packet.length);
         return newPkt;
     }
 }

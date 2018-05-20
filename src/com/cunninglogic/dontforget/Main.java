@@ -40,9 +40,8 @@ public class Main {
         System.out.println();
 
 
-
         classLoader = Main.class.getClassLoader();
-/*
+        /*
         if (args.length != 1 || (args.length != 1 && (!args[0].equals("AC") || !args[0].equals("RC") || !args[0].equals("GL")))){
             System.out.println("java -jar DontForget.jar <mode>");
             System.out.println("Modes:");
@@ -63,7 +62,6 @@ public class Main {
             System.out.println("AC Mode");
         }
 
-
         int count = 1;
 
         System.out.println("Choose target port: (* suggested port)");
@@ -73,7 +71,8 @@ public class Main {
             }
 
             System.out.println("\t[" + count + "] " + s.getSystemPortName() + " : " + s.getDescriptivePortName());
-            count++;
+
+            ++count;
         }
 
         System.out.println("\t[E] Exit");
@@ -87,17 +86,16 @@ public class Main {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            try {
 
+            try {
                 if (str.toLowerCase().toLowerCase().equals("e")) {
                     System.out.println("Exiting");
                     System.exit(0);
                 }
 
-
                 int port = Integer.parseInt(str.trim());
 
-                if ((port > count) || (port < 1)) {
+                if (port > count || port < 1) {
                     System.out.println("[!] Invalid port selection");
                     System.out.print("Choose port: ");
                 } else {
@@ -112,20 +110,20 @@ public class Main {
         }
 
         if (activePort == null) {
-            System.out.println("Couldn't find port, exiting");
-            return;
+            System.out.println("FATAL: Couldn't find port, exiting");
+            System.exit(1);
         }
 
         if (activePort.isOpen()) {
-            System.out.println(activePort.getSystemPortName() + " is already open");
+            System.out.println("FATAL: Port " + activePort.getSystemPortName() + " is already open");
             activePort.closePort(); //meh why not
-            return;
+            System.exit(1);
         }
 
         if (!activePort.openPort()) {
-            System.out.println("Couldn't open port, please close all other DUML/DJI Apps and try again");
+            System.out.println("FATAL: Couldn't open port, please close all other DUML/DJI Apps and try again");
             activePort.closePort(); //meh why not
-            return;
+            System.exit(1);
         }
 
         activePort.setBaudRate(115200);
@@ -160,7 +158,7 @@ public class Main {
         ftpClient = new FTPClient();
         try {
             ftpClient.connect("192.168.42.2", 21);
-            ftpClient.login("dontforget","aboutjcase");
+            ftpClient.login("dontforget", "aboutjcase");
             ftpClient.enterLocalPassiveMode();
             ftpClient.setFileType(ftpClient.BINARY_FILE_TYPE);
         } catch (IOException e) {
@@ -217,7 +215,7 @@ public class Main {
                     e.printStackTrace();
                 }
 
-                countdown--;
+                --countdown;
 
                 if (countdown < 1) {
                     break;
@@ -332,7 +330,7 @@ public class Main {
             e.printStackTrace();
         }
 
-        System.arraycopy(md5,0, packet, 12, 16);
+        System.arraycopy(md5, 0, packet, 12, 16);
 
         return  CRC.pktCRC(packet);
     }
